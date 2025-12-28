@@ -455,6 +455,13 @@
   padding: 1rem;
 }
 
+.modal-content {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
 /* Additional utility overrides ensuring light theme consistency */
 .subtitle {
   color: #64748b;
