@@ -12,6 +12,7 @@ export default function TarrotAdmin() {
   const [reviews, setReviews] = useState([]);
   const [reservations, setReservations] = useState([]);
   const [faqs, setFaqs] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
 
   const [customerForm, setCustomerForm] = useState({ name: '', email: '', phone: '' });
   const [faqForm, setFaqForm] = useState({ question: '', answer: '' });
@@ -34,6 +35,35 @@ export default function TarrotAdmin() {
     fetchFaqs();
     // eslint-disable-next-line
   }, [token, isRarrot]);
+
+  const sortedReservations = [...reservations].sort((a, b) => {
+    if (sortConfig.key === 'date') {
+      const dateA = new Date(`${a.date} ${a.time}`);
+      const dateB = new Date(`${b.date} ${b.time}`);
+      return sortConfig.direction === 'asc' ? dateA - dateB : dateB - dateA;
+    }
+    if (sortConfig.key === 'status') {
+      if (a.status === b.status) return 0;
+      // Confirmed first if desc, Pending first if asc
+      return sortConfig.direction === 'asc'
+        ? (a.status > b.status ? 1 : -1)
+        : (a.status < b.status ? 1 : -1);
+    }
+    if (sortConfig.key === 'name') {
+      return sortConfig.direction === 'asc'
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name);
+    }
+    return 0;
+  });
+
+  const handleSort = (key) => {
+    setSortConfig(current => ({
+      key,
+      direction: current.key === key && current.direction === 'desc' ? 'asc' : 'desc'
+    }));
+  };
+
 
   const fetchCustomers = async () => {
     try {
@@ -152,24 +182,47 @@ export default function TarrotAdmin() {
         {activeTab === 'reservations' && (
           <section id="reservations">
             <h3>📅 Reservations</h3>
+
+            <div className="sort-controls">
+              <span>정렬: </span>
+              <button
+                className={`sort-btn ${sortConfig.key === 'date' ? 'active' : ''}`}
+                onClick={() => handleSort('date')}
+              >
+                날짜순 {sortConfig.key === 'date' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              </button>
+              <button
+                className={`sort-btn ${sortConfig.key === 'status' ? 'active' : ''}`}
+                onClick={() => handleSort('status')}
+              >
+                상태순 {sortConfig.key === 'status' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              </button>
+              <button
+                className={`sort-btn ${sortConfig.key === 'name' ? 'active' : ''}`}
+                onClick={() => handleSort('name')}
+              >
+                이름순 {sortConfig.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              </button>
+            </div>
+
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>이름</th>
+                  <th onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>이름</th>
                   <th>연락처</th>
-                  <th>예약 일시</th>
+                  <th onClick={() => handleSort('date')} style={{ cursor: 'pointer' }}>예약 일시</th>
                   <th>상담 유형</th>
                   <th>타로 덱</th>
                   <th>요청 내용</th>
-                  <th>상태</th>
+                  <th onClick={() => handleSort('status')} style={{ cursor: 'pointer' }}>상태</th>
                   <th>작업</th>
                 </tr>
               </thead>
               <tbody>
-                {reservations.length === 0 && (
+                {sortedReservations.length === 0 && (
                   <tr><td colSpan="9" className="text-center py-4 text-gray-500">예약 내역이 없습니다.</td></tr>
                 )}
-                {reservations.map(r => (
+                {sortedReservations.map(r => (
                   <tr key={r.id}>
                     <td className="font-bold" data-label="이름">{r.name}</td>
                     <td data-label="연락처">{r.phone}</td>
