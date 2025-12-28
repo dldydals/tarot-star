@@ -218,3 +218,156 @@
     border-radius: 6px;
     cursor: pointer
 }
+
+.mobile-menu-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.mobile-menu-trigger {
+    display: none;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background: #581c87;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.hidden-mobile {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .tarrot-admin {
+        flex-direction: column;
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    /* Option: Hide sidebar completely or just nav? */
+    /* Let's keep sidebar visible but compact */
+    .sidebar {
+        width: 100%;
+        padding: 16px;
+        position: relative;
+    }
+
+    .sidebar h2 {
+        font-size: 1.25rem;
+        margin-bottom: 0;
+        /* Reduced margin when closed */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .sidebar h2:has(+ nav.open) {
+        margin-bottom: 16px;
+    }
+
+    .sidebar nav {
+        display: none;
+    }
+
+    .sidebar nav.open {
+        display: block;
+        margin-top: 16px;
+    }
+
+    .hidden-mobile {
+        display: none;
+    }
+
+    /* If nav is open, show hidden-mobile elements (like logout) */
+    .sidebar:has(nav.open) .hidden-mobile {
+        display: block;
+        margin-top: 16px;
+    }
+
+    .sidebar nav.open {
+        display: block;
+    }
+
+    .sidebar nav .nav-item {
+        padding: 10px;
+        margin: 2px 0;
+    }
+
+    .admin-main {
+        padding: 16px;
+    }
+
+    /* Transform Tables to Cards */
+    .admin-table,
+    .admin-table thead,
+    .admin-table tbody,
+    .admin-table th,
+    .admin-table td,
+    .admin-table tr {
+        display: block;
+    }
+
+    .admin-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .admin-table tr {
+        margin-bottom: 16px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .admin-table td {
+        border: none;
+        border-bottom: 1px solid #f1f5f9;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+        min-height: 40px;
+    }
+
+    .admin-table td:last-child {
+        border-bottom: none;
+    }
+
+    .admin-table td:before {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 600;
+        color: #64748b;
+        content: attr(data-label);
+    }
+
+    .truncate {
+        max-width: 100% !important;
+        white-space: normal !important;
+        text-align: right;
+    }
+
+    /* Form adjustments */
+    .admin-form {
+        flex-direction: column;
+    }
+
+    .admin-form input,
+    .admin-form textarea {
+        width: 100% !important;
+    }
+}

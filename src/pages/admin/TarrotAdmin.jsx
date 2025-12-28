@@ -6,6 +6,7 @@ import './TarrotAdmin.css';
 export default function TarrotAdmin() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('reservations');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [customers, setCustomers] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -127,20 +128,27 @@ export default function TarrotAdmin() {
 
   return (
     <div className="tarrot-admin">
-      <aside className="sidebar">
-        <h2>Tarrot Admin</h2>
-        <nav>
-          <button className={`nav-item ${activeTab === 'reservations' ? 'active' : ''}`} onClick={() => setActiveTab('reservations')}>Reservations</button>
-          <button className={`nav-item ${activeTab === 'faqs' ? 'active' : ''}`} onClick={() => setActiveTab('faqs')}>FAQs</button>
-          <button className={`nav-item ${activeTab === 'customers' ? 'active' : ''}`} onClick={() => setActiveTab('customers')}>Customers</button>
-          <button className={`nav-item ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>Reviews</button>
+      <aside className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
+        <h2>
+          Tarrot Admin
+          <button className="mobile-menu-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+        </h2>
+        <nav className={isMobileMenuOpen ? 'open' : ''}>
+          <button className={`nav-item ${activeTab === 'reservations' ? 'active' : ''}`} onClick={() => { setActiveTab('reservations'); setIsMobileMenuOpen(false); }}>Reservations</button>
+          <button className={`nav-item ${activeTab === 'faqs' ? 'active' : ''}`} onClick={() => { setActiveTab('faqs'); setIsMobileMenuOpen(false); }}>FAQs</button>
+          <button className={`nav-item ${activeTab === 'customers' ? 'active' : ''}`} onClick={() => { setActiveTab('customers'); setIsMobileMenuOpen(false); }}>Customers</button>
+          <button className={`nav-item ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => { setActiveTab('reviews'); setIsMobileMenuOpen(false); }}>Reviews</button>
         </nav>
-        <div style={{ marginTop: 16 }}>
+        <div style={{ marginTop: 16 }} className={!isMobileMenuOpen ? 'hidden-mobile' : ''}>
           <button className="btn" onClick={handleLogout}>Logout</button>
         </div>
       </aside>
 
       <main className="admin-main">
+        <button className="mobile-menu-trigger" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>☰ Menu</button>
+
         {activeTab === 'reservations' && (
           <section id="reservations">
             <h3>📅 Reservations</h3>
@@ -163,15 +171,15 @@ export default function TarrotAdmin() {
                 )}
                 {reservations.map(r => (
                   <tr key={r.id}>
-                    <td className="font-bold">{r.name}</td>
-                    <td>{r.phone}</td>
-                    <td>{r.date} {r.time}</td>
-                    <td>
+                    <td className="font-bold" data-label="이름">{r.name}</td>
+                    <td data-label="연락처">{r.phone}</td>
+                    <td data-label="예약 일시">{r.date} {r.time}</td>
+                    <td data-label="상담 유형">
                       {/* <span className={`badge ${r.type}`}> */}
                       {r.type === 'phone' ? '🔮 심층 전화 타로' : r.type === 'visit' ? '🏠 프리미엄 방문 상담' : (r.type === 'chat' ? '💬 빠른 채팅 타로' : r.type)}
                       {/* </span> */}
                     </td>
-                    <td>
+                    <td data-label="타로 덱">
                       {/* <span className="badge deck"> */}
                       {r.deck === 'universal' ? '유니버셜' :
                         r.deck === 'symbolon' ? '심볼론' :
@@ -180,15 +188,15 @@ export default function TarrotAdmin() {
                               r.deck === 'time' ? '시간의 바퀴' : '-'}
                       {/* </span> */}
                     </td>
-                    <td className="text-sm text-gray-600 truncate max-w-xs" title={r.request_content}>
+                    <td className="text-sm text-gray-600 truncate max-w-xs" title={r.request_content} data-label="요청 내용">
                       {r.request_content || '-'}
                     </td>
-                    <td>
+                    <td data-label="상태">
                       <span className={`status-badge ${r.status}`}>
                         {r.status === 'confirmed' ? '확정됨' : '대기중'}
                       </span>
                     </td>
-                    <td>
+                    <td data-label="작업">
                       {r.status !== 'confirmed' && (
                         <button className="btn small" onClick={() => confirmReservation(r.id)}>확정</button>
                       )}
