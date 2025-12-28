@@ -1,0 +1,15 @@
+[2025-12-09T01:08:47.711Z] Failed to update vendor dr1
+Payload: {"id":"dr1","name":"엘리자베스 럭스","category":"드레스","location":"서울 청담동","rating":"5.0","image_url":"https://images.unsplash.com/photo-1594552072238-b8a33785b261?auto=format&fit=crop&w=800&q=80","tags":["수입드레스","화려한","비즈"],"description":"","price_info":null,"contact":null,"created_at":"2025-12-07T22:18:19.000Z","gallery_images":"[]","is_featured":true,"image":"/assets/uploads/1765242526343-533205005.png"}
+Error: Unknown column 'status' in 'field list'
+Stack: Error: Unknown column 'status' in 'field list'
+    at PromisePool.query (/home/ymlee/Dev/bomare-wedding/node_modules/mysql2/lib/promise/pool.js:36:22)
+    at file:///home/ymlee/Dev/bomare-wedding/server/index.js:212:18
+    at Layer.handleRequest (/home/ymlee/Dev/bomare-wedding/node_modules/router/lib/layer.js:152:17)
+    at next (/home/ymlee/Dev/bomare-wedding/node_modules/router/lib/route.js:157:13)
+    at Route.dispatch (/home/ymlee/Dev/bomare-wedding/node_modules/router/lib/route.js:117:3)
+    at handle (/home/ymlee/Dev/bomare-wedding/node_modules/router/index.js:435:11)
+    at Layer.handleRequest (/home/ymlee/Dev/bomare-wedding/node_modules/router/lib/layer.js:152:17)
+    at /home/ymlee/Dev/bomare-wedding/node_modules/router/index.js:295:15
+    at param (/home/ymlee/Dev/bomare-wedding/node_modules/router/index.js:600:14)
+    at param (/home/ymlee/Dev/bomare-wedding/node_modules/router/index.js:610:14)
+-----------------------------------
